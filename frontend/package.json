@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@angular/cli": "^12.2.5",
+    "@angular/core": "^12.2.5",
     "concurrently": "^5.2.0",
     "http-server": "^13.0.1",
     "live-server": "^1.2.1",
