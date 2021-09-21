@@ -6,11 +6,11 @@ require('dotenv').config();
 
 
 exports.signup = (req, res, next) => {
-  const hashedEmail = cryptojs.HmacSHA512(req.body.email, process.env.SECRET_CRYPTOJS_TOKEN).toString(cryptojs.enc.Base64);
+  // const hashedEmail = cryptojs.HmacSHA512(req.body.email, process.env.SECRET_CRYPTOJS_TOKEN).toString(cryptojs.enc.Base64);
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
-        email: hashedEmail,
+        email: req.body.email,
         password: hash
       });
       user.save()
