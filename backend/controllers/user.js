@@ -24,7 +24,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   // const hashedEmail = cryptojs.HmacSHA512(req.body.email, process.env.SECRET_CRYPTOJS_TOKEN).toString(cryptojs.enc.Base64);
-  User.findOne({ email: hashedEmail })
+  User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
