@@ -1,18 +1,21 @@
 const Sauce = require("../models/Sauce");
 const fs = require('fs');
 
+// Afficher toutes les sauces
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(404).json({ error }));
 };
 
+// Afficher une seule sauce
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(404).json({ error }));
 }
 
+// Créer une sauce
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce)
   delete sauceObject._id;
@@ -24,12 +27,12 @@ exports.createSauce = (req, res, next) => {
     usersLiked: [' '],
     usersdisLiked: [' '],
   });
-  sauce
-    .save()
+  sauce.save()
     .then(() => res.status(201).json({ message: "Sauce enregistrée" }))
     .catch((error) => res.status(400).json({ error }));
 };
 
+// Modifier une sauce
 exports.updateSauce = (req, res, next) => {
   const sauceObject = req.file ?
   {
@@ -41,6 +44,7 @@ exports.updateSauce = (req, res, next) => {
   .catch(error => res.status(400).json({ error }))
 }
 
+// Supprimer une sauce
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id : req.params.id })
   .then(sauce => {
@@ -55,11 +59,12 @@ exports.deleteSauce = (req, res, next) => {
   .catch(error => res.status(500).json({ error }))
 }
 
+// Like / Dislike une sauce
 exports.likeDislikeSauce = (req, res, next) => {
   let like = req.body.like
   let userId = req.body.userId
   let sauceId = req.params.id
-  
+          // Sauce liked
   switch (like) {
     case 1 :
         Sauce.updateOne({ _id: sauceId }, { $push: { usersLiked: userId }, $inc: { likes: +1 }})
@@ -67,7 +72,7 @@ exports.likeDislikeSauce = (req, res, next) => {
           .catch((error) => res.status(400).json({ error }))
             
       break;
-
+          // Annulation du like / dislike
     case 0 :
         Sauce.findOne({ _id: sauceId })
            .then((sauce) => {
@@ -84,7 +89,7 @@ exports.likeDislikeSauce = (req, res, next) => {
           })
           .catch((error) => res.status(404).json({ error }))
       break;
-
+          // Sauce Disliked et mise à jour avec des new valeurs
     case -1 :
         Sauce.updateOne({ _id: sauceId }, { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }})
           .then(() => { res.status(200).json({ message: `Je n'aime pas` }) })
