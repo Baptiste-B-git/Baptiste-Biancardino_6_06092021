@@ -9,9 +9,7 @@ const userRoutes = require('./routes/user')
 const sauceRoutes = require('./routes/sauce');
 
 // Connexion à la base de données
-mongoose
-  .connect(
-    process.env.SECRET_DB,
+mongoose.connect(process.env.SECRET_DB,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
